@@ -27,6 +27,8 @@
 * 
 ****/
 
+
+
 package massive.sys.util;
 
 import massive.sys.io.FileSys;
@@ -94,9 +96,14 @@ class ZipUtil
 			
 		for (file in files)
 		{
-			var stat = sys.FileSystem.stat(file.nativePath);
-
-			var bytes:Bytes = file.isDirectory ? null: sys.io.File.getBytes(file.nativePath);
+			var path = file.nativePath;
+			
+			// remove trailing slash - causes exception on windows
+			if (path.charAt(path.length - 1) == File.seperator) path = path.substr(0, path.length - 1);
+			
+			var stat = sys.FileSystem.stat(path);
+			
+			var bytes:Bytes = file.isDirectory ? null: sys.io.File.getBytes(path);
 			var name:String = dir.getRelativePath(file) + (file.isDirectory ? File.seperator : "");
 			
 			#if haxe3
